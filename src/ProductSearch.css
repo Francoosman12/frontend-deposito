@@ -1,0 +1,102 @@
+/* Estilos para el formulario */
+.search-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.search-form .form-group {
+    margin-bottom: 15px;
+}
+
+/* Agrupar campos en una sola línea */
+.search-form .form-group-inline {
+    display: flex;
+    gap: 15px; /* Espacio entre los campos */
+}
+
+.search-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.search-form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Reducir el tamaño de los inputs en línea */
+.search-form input.short {
+    width: auto;
+    flex: 1;
+}
+
+.search-form .btn-search, .search-form .btn-reset {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    margin-top: 10px;
+}
+
+.search-form .btn-reset {
+    background-color: #dc3545; /* Color de fondo para el botón de reset */
+}
+
+.search-form .btn-reset:hover {
+    background-color: #c82333;
+}
+
+.flex{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+.base{
+    padding-right: 15px;
+}
+.vto{
+    
+    padding-left: 15px;
+    
+}
+
+/* Estilos de impresión */
+@media print {
+    .search-form, .btn-print, .btn-reset {
+        display: none !important;
+    }
+
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    .print-results li {
+        font-size: 20px;
+    }
+
+    .flex {
+        font-size: 25px;
+    }
+
+    .cod {
+        font-size: 180px;
+    }
+
+    .ingreso {
+        font-size: 50px;
+    }
+}
