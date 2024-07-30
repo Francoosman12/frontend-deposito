@@ -15,7 +15,7 @@ const SearchComponent = () => {
   const fetchData = async (value, type) => {
     console.log(`Fetching data with ${type}: ${value}`); // Debugging line
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/stock`, {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/stock`, {
         params: { query: value }
       });
 
@@ -45,14 +45,14 @@ const SearchComponent = () => {
     if (searchEAN) {
       fetchData(searchEAN, 'EAN');
     }
-  }, [searchEAN]);
+  }, [searchEAN]); // Ensure searchEAN is included in the dependency array
 
   // Effect to fetch data when searchQuery changes
   useEffect(() => {
     if (searchQuery && !searchEAN) {
       fetchData(searchQuery, 'query');
     }
-  }, [searchQuery]);
+  }, [searchQuery, searchEAN]); // Ensure searchQuery and searchEAN are included
 
   // Handle form submission
   const handleSearch = (event) => {
