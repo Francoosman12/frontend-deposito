@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../ProductSearch.css';
 
@@ -12,10 +12,10 @@ const SearchComponent = () => {
   const [fechaVencimiento, setFechaVencimiento] = useState(null);
 
   // Function to fetch data based on EAN or Code
-  const fetchData = useCallback(async (value, type) => {
+  const fetchData = async (value, type) => {
     console.log(`Fetching data with ${type}: ${value}`); // Debugging line
     try {
-      const response = await axios.get('http://localhost:3000/api/stock', {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/stock`, {
         params: { query: value }
       });
 
@@ -38,21 +38,21 @@ const SearchComponent = () => {
       setError('Error fetching data: ' + err.message);
       setResults([]);
     }
-  }, []);
+  };
 
   // Effect to fetch data when searchEAN changes
   useEffect(() => {
     if (searchEAN) {
       fetchData(searchEAN, 'EAN');
     }
-  }, [searchEAN, fetchData]);
+  }, [searchEAN]);
 
   // Effect to fetch data when searchQuery changes
   useEffect(() => {
     if (searchQuery && !searchEAN) {
       fetchData(searchQuery, 'query');
     }
-  }, [searchQuery, searchEAN, fetchData]);
+  }, [searchQuery]);
 
   // Handle form submission
   const handleSearch = (event) => {
