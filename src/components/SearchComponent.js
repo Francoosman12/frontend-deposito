@@ -15,22 +15,30 @@ const SearchComponent = () => {
   const fetchData = useCallback(async (value, type) => {
     console.log(`Fetching data with ${type}: ${value}`); // Debugging line
     try {
-      const response = await axios.get('http://localhost:3000/api/stock', {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/stock`, {
         params: { query: value }
       });
-
+  
       console.log('Response data:', response.data); // Debugging line
-
-      if (Array.isArray(response.data) && response.data.length > 0) {
-        const product = response.data[0]; // Take the first result from the response
-
-        // Update the fields based on the type of search
+  
+      let uniqueResults = response.data;
+  
+      if (type === 'EAN') {
+        uniqueResults = response.data.filter(item => item.ARTICULO_EANUNI === value);
+      } else {
+        uniqueResults = Array.from(new Set(response.data.map(item => item.ARTICULO_CODIGO)))
+          .map(code => response.data.find(item => item.ARTICULO_CODIGO === code));
+      }
+  
+      // Solo mostrar el primer resultado único
+      if (uniqueResults.length > 0) {
+        const product = uniqueResults[0]; // Toma solo el primer resultado
+        setResults([product]); // Actualiza el estado con solo un producto
         if (type === 'EAN') {
           setSearchQuery(product.ARTICULO_CODIGO?.trim() || '');
         } else {
           setSearchEAN(product.ARTICULO_EANUNI || '');
         }
-        setResults(response.data);
       } else {
         setResults([]);
       }
@@ -39,6 +47,8 @@ const SearchComponent = () => {
       setResults([]);
     }
   }, []);
+  
+  
 
   // Effect to fetch data when searchEAN changes
   useEffect(() => {
