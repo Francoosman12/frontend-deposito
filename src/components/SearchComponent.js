@@ -50,7 +50,7 @@ const SearchComponent = () => {
       <h1 className='search-form'>Buscar Productos</h1>
       <form onSubmit={handleSearch} className="search-form">
         <div className="form-group">
-          <label htmlFor="searchQuery">Buscar por Código EAN o Producto:</label>
+          <label htmlFor="searchQuery">Buscar por Código EAN</label>
           <input
             type="text"
             id="searchQuery"
