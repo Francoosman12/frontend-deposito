@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 import '../ProductSearch.css';
 
@@ -6,39 +6,28 @@ const SearchComponent = () => {
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchEAN, setSearchEAN] = useState('');
   const [base, setBase] = useState('');
   const [fechaIngreso, setFechaIngreso] = useState(null);
   const [fechaVencimiento, setFechaVencimiento] = useState(null);
 
-  // Function to fetch data based on EAN or Code
-  const fetchData = useCallback(async (value, type) => {
-    console.log(`Fetching data with ${type}: ${value}`); // Debugging line
+  // Function to fetch data based on query
+  const fetchData = useCallback(async (query) => {
+    console.log(`Fetching data with query: ${query}`); // Debugging line
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/stock`, {
-        params: { query: value }
+        params: { query }
       });
-  
+
       console.log('Response data:', response.data); // Debugging line
-  
-      let uniqueResults = response.data;
-  
-      if (type === 'EAN') {
-        uniqueResults = response.data.filter(item => item.ARTICULO_EANUNI === value);
-      } else {
-        uniqueResults = Array.from(new Set(response.data.map(item => item.ARTICULO_CODIGO)))
-          .map(code => response.data.find(item => item.ARTICULO_CODIGO === code));
-      }
-  
-      // Solo mostrar el primer resultado único
-      if (uniqueResults.length > 0) {
-        const product = uniqueResults[0]; // Toma solo el primer resultado
-        setResults([product]); // Actualiza el estado con solo un producto
-        if (type === 'EAN') {
-          setSearchQuery(product.ARTICULO_CODIGO?.trim() || '');
-        } else {
-          setSearchEAN(product.ARTICULO_EANUNI || '');
-        }
+
+      // Filtra por EAN o Código de Producto
+      const product = response.data.find(item =>
+        item.ARTICULO_EANUNI === query || item.ARTICULO_CODIGO === query
+      );
+
+      if (product) {
+        setResults([product]);
+        setSearchQuery(query);
       } else {
         setResults([]);
       }
@@ -47,49 +36,12 @@ const SearchComponent = () => {
       setResults([]);
     }
   }, []);
-  
-  
-
-  // Effect to fetch data when searchEAN changes
-  useEffect(() => {
-    if (searchEAN) {
-      fetchData(searchEAN, 'EAN');
-    }
-  }, [searchEAN, fetchData]);
-
-  // Effect to fetch data when searchQuery changes
-  useEffect(() => {
-    if (searchQuery && !searchEAN) {
-      fetchData(searchQuery, 'query');
-    }
-  }, [searchQuery, searchEAN, fetchData]);
 
   // Handle form submission
   const handleSearch = (event) => {
     event.preventDefault();
-    if (searchEAN) {
-      fetchData(searchEAN, 'EAN');
-    } else if (searchQuery) {
-      fetchData(searchQuery, 'query');
-    }
-  };
-
-  // Print the current view
-  const printResults = () => {
-    if (!base || !fechaIngreso || !fechaVencimiento) {
-      alert('Por favor, complete todos los campos de Base, Fecha de Ingreso y Fecha de Vencimiento.');
-      return;
-    }
-    window.print();
-  };
-
-  // Handle input changes
-  const handleChange = (e, type) => {
-    const value = e.target.value;
-    if (type === 'query') {
-      setSearchQuery(value);
-    } else {
-      setSearchEAN(value);
+    if (searchQuery) {
+      fetchData(searchQuery);
     }
   };
 
@@ -98,25 +50,14 @@ const SearchComponent = () => {
       <h1 className='search-form'>Buscar Productos</h1>
       <form onSubmit={handleSearch} className="search-form">
         <div className="form-group">
-          <label htmlFor="searchEAN">Buscar por Código EAN:</label>
-          <input
-            type="text"
-            id="searchEAN"
-            name="searchEAN"
-            placeholder="Código EAN"
-            value={searchEAN}
-            onChange={(e) => handleChange(e, 'EAN')}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="searchQuery">Buscar por Código de Producto:</label>
+          <label htmlFor="searchQuery">Buscar por Código EAN o Producto:</label>
           <input
             type="text"
             id="searchQuery"
             name="searchQuery"
-            placeholder="Código de Producto"
+            placeholder="Código EAN o Producto"
             value={searchQuery}
-            onChange={(e) => handleChange(e, 'query')}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div className="form-group form-group-inline">
@@ -158,10 +99,11 @@ const SearchComponent = () => {
         <button type="submit" className="btn-search">Buscar</button>
         <button type="button" className="btn-reset" onClick={() => {
           setSearchQuery('');
-          setSearchEAN('');
           setBase('');
           setFechaIngreso(null);
           setFechaVencimiento(null);
+          setResults([]);
+          setError(null);
         }}>Borrar</button>
       </form>
 
@@ -182,7 +124,7 @@ const SearchComponent = () => {
               </li>
             ))}
           </ul>
-          <button onClick={printResults} className="btn-print">Imprimir</button>
+          <button onClick={() => window.print()} className="btn-print">Imprimir</button>
         </div>
       )}
     </div>
