@@ -45,6 +45,11 @@ const SearchComponent = () => {
     }
   };
 
+  // Check if printing is allowed
+  const canPrint = () => {
+    return base && fechaVencimiento;
+  };
+
   return (
     <div>
       <h1 className='search-form'>Buscar Productos</h1>
@@ -55,7 +60,7 @@ const SearchComponent = () => {
             type="text"
             id="searchQuery"
             name="searchQuery"
-            placeholder="Código EAN o Producto"
+            placeholder="Código EAN"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -124,7 +129,13 @@ const SearchComponent = () => {
               </li>
             ))}
           </ul>
-          <button onClick={() => window.print()} className="btn-print">Imprimir</button>
+          <button 
+            onClick={() => { if (canPrint()) window.print(); }}
+            className="btn-print"
+            disabled={!canPrint()}
+          >
+            Imprimir
+          </button>
         </div>
       )}
     </div>
