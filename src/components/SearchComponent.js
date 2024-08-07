@@ -7,8 +7,8 @@ const SearchComponent = () => {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [base, setBase] = useState('');
-  const [fechaIngreso, setFechaIngreso] = useState(null);
-  const [fechaVencimiento, setFechaVencimiento] = useState(null);
+  const [fechaIngreso, setFechaIngreso] = useState('');
+  const [fechaVencimiento, setFechaVencimiento] = useState('');
 
   // Function to fetch data based on query
   const fetchData = useCallback(async (query) => {
@@ -50,6 +50,14 @@ const SearchComponent = () => {
     return base && fechaVencimiento;
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <div>
       <h1 className='search-form'>Buscar Productos</h1>
@@ -84,7 +92,7 @@ const SearchComponent = () => {
               type="date"
               id="fechaIngreso"
               name="fechaIngreso"
-              value={fechaIngreso || ''}
+              value={fechaIngreso}
               onChange={(e) => setFechaIngreso(e.target.value)}
               className="short"
             />
@@ -95,7 +103,7 @@ const SearchComponent = () => {
               type="date"
               id="fechaVencimiento"
               name="fechaVencimiento"
-              value={fechaVencimiento || ''}
+              value={fechaVencimiento}
               onChange={(e) => setFechaVencimiento(e.target.value)}
               className="short"
             />
@@ -105,8 +113,8 @@ const SearchComponent = () => {
         <button type="button" className="btn-reset" onClick={() => {
           setSearchQuery('');
           setBase('');
-          setFechaIngreso(null);
-          setFechaVencimiento(null);
+          setFechaIngreso('');
+          setFechaVencimiento('');
           setResults([]);
           setError(null);
         }}>Borrar</button>
@@ -119,12 +127,12 @@ const SearchComponent = () => {
           <ul className="print-results">
             {results.map((result, index) => (
               <li key={index} className="print-result-item">
-                <h1 className='ingreso'>INGRESO: {fechaIngreso ? new Date(fechaIngreso).toLocaleDateString() : 'N/A'}</h1>
+                <h1 className='ingreso'>INGRESO: {fechaIngreso ? formatDate(fechaIngreso) : 'N/A'}</h1>
                 <h1 className='cod'>{result.ARTICULO_CODIGO}</h1>
                 <h1>{result.ARTICULO_NOMBRE}</h1>
                 <div className='flex'>
                   <h1 className='base'>BASE: {base || 'N/A'}</h1>
-                  <h1 className='vto'>VTO: {fechaVencimiento ? new Date(fechaVencimiento).toLocaleDateString() : 'N/A'}</h1>
+                  <h1 className='vto'>VTO: {fechaVencimiento ? formatDate(fechaVencimiento) : 'N/A'}</h1>
                 </div>
               </li>
             ))}
