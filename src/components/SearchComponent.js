@@ -15,7 +15,7 @@ const SearchComponent = () => {
   const fetchData = async (value, type) => {
     console.log(`Fetching data with ${type}: ${value}`); // Debugging line
     try {
-      const response = await axios.get(`http://localhost:3000/api/stock`, {
+      const response = await axios.get(`https://prueba2-backend-deposito-91f3a67faaa2.herokuapp.com/api/stock`, {
         params: { query: value }
       });
 
