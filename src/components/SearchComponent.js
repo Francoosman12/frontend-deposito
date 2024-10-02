@@ -69,6 +69,12 @@ const SearchComponent = () => {
     }
   };
 
+  const formatFecha = (fecha) => {
+  if (!fecha) return 'N/A';
+  
+  const [year, month, day] = fecha.split('-');
+  return `${day}-${month}-${year}`;
+};
   return (
     <div>
       <h1 className='search-form'>Buscar Productos</h1>
@@ -143,24 +149,24 @@ const SearchComponent = () => {
 
       {error && <div className="error">{error}</div>}
 
-      {results.length > 0 && (
-        <div>
-          <ul className="print-results">
-            {results.map((result, index) => (
-              <li key={index} className="print-result-item">
-                <h1 className='ingreso'>INGRESO: {fechaIngreso ? new Date(fechaIngreso).toLocaleDateString() : 'N/A'}</h1>
-                <h1 className='cod'>{result.ARTICULO_CODIGO}</h1>
-                <h1>{result.ARTICULO_NOMBRE}</h1>
-                <div className='flex'>
-                  <h1 className='base'>BASE: {base || 'N/A'}</h1>
-                  <h1 className='vto'>VTO: {fechaVencimiento ? new Date(fechaVencimiento).toLocaleDateString() : 'N/A'}</h1>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <button onClick={printResults} className="btn-print">Imprimir</button>
-        </div>
-      )}
+     {results.length > 0 && (
+  <div>
+    <ul className="print-results">
+      {results.map((result, index) => (
+        <li key={index} className="print-result-item">
+          <h1 className='ingreso'>INGRESO: {fechaIngreso ? formatFecha(fechaIngreso) : 'N/A'}</h1>
+          <h1 className='cod'>{result.ARTICULO_CODIGO}</h1>
+          <h1>{result.ARTICULO_NOMBRE}</h1>
+          <div className='flex'>
+            <h1 className='base'>BASE: {base || 'N/A'}</h1>
+            <h1 className='vto'>VTO: {fechaVencimiento ? formatFecha(fechaVencimiento) : 'N/A'}</h1>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <button onClick={printResults} className="btn-print">Imprimir</button>
+  </div>
+)}
     </div>
   );
 };
