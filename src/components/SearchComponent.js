@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import '../ProductSearch.css';
 
@@ -39,20 +39,6 @@ const SearchComponent = () => {
       setResults([]);
     }
   };
-
-  // Effect to fetch data when searchEAN changes
-  useEffect(() => {
-    if (searchEAN) {
-      fetchData(searchEAN, 'EAN');
-    }
-  }, [searchEAN]); // Ensure searchEAN is included in the dependency array
-
-  // Effect to fetch data when searchQuery changes
-  useEffect(() => {
-    if (searchQuery && !searchEAN) {
-      fetchData(searchQuery, 'query');
-    }
-  }, [searchQuery, searchEAN]); // Ensure searchQuery and searchEAN are included
 
   // Handle form submission
   const handleSearch = (event) => {
