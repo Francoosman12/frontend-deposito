@@ -15,7 +15,7 @@ const SearchComponent = () => {
   const fetchData = async (value, type) => {
     console.log(`Fetching data with ${type}: ${value}`); // Debugging line
     try {
-      const response = await axios.get(`https://prueba2-backend-deposito-91f3a67faaa2.herokuapp.com/api/stock`, {
+      const response = await axios.get(`https://backend-deposito-qz2gwka6l-francoosman12s-projects.vercel.app/api/stock`, {
         params: { query: value }
       });
 
@@ -77,7 +77,7 @@ const SearchComponent = () => {
 };
   return (
     <div>
-      <h1 className='search-form'>Buscar Productos</h1>
+      <h1 className='search-form'>Buscar Productos Hola</h1>
       <form onSubmit={handleSearch} className="search-form">
         <div className="form-group">
           <label htmlFor="searchEAN">Buscar por Código EAN:</label>
