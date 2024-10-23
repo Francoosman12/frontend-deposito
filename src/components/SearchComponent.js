@@ -15,7 +15,7 @@ const SearchComponent = () => {
   const fetchData = async (value, type) => {
     console.log(`Fetching data with ${type}: ${value}`); // Debugging line
     try {
-      const response = await axios.get(`https://backend-deposito-qz2gwka6l-francoosman12s-projects.vercel.app/api/stock`, {
+      const response = await axios.get(`http://localhost:3000/api/stock`, {
         params: { query: value }
       });
 
