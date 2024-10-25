@@ -15,9 +15,11 @@ const SearchComponent = () => {
   const fetchData = async (value, type) => {
     console.log(`Fetching data with ${type}: ${value}`); // Debugging line
     try {
-      const response = await axios.get(`http://localhost:3000/api/stock`, {
+      const response = await axios.get(`https://backend-deposito-4mpnwi11n-francoosman12s-projects.vercel.app/api/stock`, {
         params: { query: value }
       });
+      
+    
 
       console.log('Response data:', response.data); // Debugging line
 
@@ -77,7 +79,7 @@ const SearchComponent = () => {
 };
   return (
     <div>
-      <h1 className='search-form'>Buscar Productos Hola</h1>
+      <h1 className='search-form'>BUSCAR PRODUCTOS PARA IMPRIMIR</h1>
       <form onSubmit={handleSearch} className="search-form">
         <div className="form-group">
           <label htmlFor="searchEAN">Buscar por Código EAN:</label>
